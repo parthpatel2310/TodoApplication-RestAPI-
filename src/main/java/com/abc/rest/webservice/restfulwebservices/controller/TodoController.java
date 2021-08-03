@@ -59,7 +59,7 @@ public class TodoController {
     @PostMapping("/users/createtodos")
     public ResponseEntity<TodoBean>  saveTodo(@RequestBody TodoBean todo)
     {
-
+        System.out.println(todo);
         TodoBean updatedTodo = todoService.saveTodo(todo);
         if(todo != null) {
             return new ResponseEntity<TodoBean>(todo, HttpStatus.OK);

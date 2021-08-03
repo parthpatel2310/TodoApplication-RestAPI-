@@ -7,52 +7,42 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name="user")
 @CrossOrigin
-public class UserBean  implements UserDetails {
+public class UserBean  implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "userid")
     private int id;
+
     private String name;
-    private String userName;
+
     private String password;
 
-    public UserBean() {
+    private String userName;
+
+    @OneToOne
+    @JoinColumn(name="usertypeid")
+    private UserTypeBean userTypeId;
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
-    public UserBean(int id) {
-        this.id = id;
+    @Override
+    public String getPassword() {
+        return password;
     }
 
-    public UserBean(int id, String name, String userName, String password) {
-        this.id = id;
-        this.name = name;
-        this.userName = userName;
-        this.password = password;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
+    @Override
     public String getUsername() {
         return userName;
     }
@@ -77,34 +67,67 @@ public class UserBean  implements UserDetails {
         return true;
     }
 
-    public void setUsername(String userName) {
+    public UserBean(){
+
+    }
+
+
+
+    public UserBean(int id, String name, String password, String userName, UserTypeBean userType) {
+        this.id = id;
+        this.name = name;
+        this.password = password;
         this.userName = userName;
+        this.userTypeId = userType;
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
+    public int getId() {
+        return id;
     }
 
-    public String getPassword() {
-        return password;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public UserTypeBean getUserType() {
+        return userTypeId;
+    }
+
+    public void setUserType(UserTypeBean userTypeId) {
+        this.userTypeId = userTypeId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UserBean)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
         UserBean userBean = (UserBean) o;
-        return getId() == userBean.getId();
+        return id == userBean.id && Objects.equals(name, userBean.name) && Objects.equals(password, userBean.password) && Objects.equals(userName, userBean.userName) && Objects.equals(userTypeId, userBean.userTypeId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId());
+        return Objects.hash(id, name, password, userName, userTypeId);
     }
 
     @Override
@@ -112,10 +135,9 @@ public class UserBean  implements UserDetails {
         return "UserBean{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", username='" + userName + '\'' +
                 ", password='" + password + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userTypeId=" + userTypeId +
                 '}';
     }
-
-
 }

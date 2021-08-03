@@ -1,11 +1,14 @@
 package com.abc.rest.webservice.restfulwebservices.bean;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
 @Table(name="todo")
+@CrossOrigin
 public class TodoBean {
 
     @Id

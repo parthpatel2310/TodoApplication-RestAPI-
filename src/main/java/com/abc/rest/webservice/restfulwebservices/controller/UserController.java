@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 public class UserController {
@@ -25,6 +27,7 @@ public class UserController {
     @PostMapping("/users/createusers")
     public ResponseEntity<?> saveTodo(@RequestBody UserBean user)
     {
+        System.out.println(user);
         UserBean users = userService.getUserByName(user.getUsername());
         if(users != null)
         {
@@ -53,6 +56,18 @@ public class UserController {
         if(users != null)
         {
             return new ResponseEntity<UserBean>(users, HttpStatus.OK);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/users/getuserdetails")
+    public ResponseEntity<List<UserBean>> getUserDetails()
+    {
+
+        List<UserBean> users = userService.findAll();
+        if(users != null)
+        {
+            return new ResponseEntity<List<UserBean>>(users, HttpStatus.OK);
         }
         return ResponseEntity.notFound().build();
     }

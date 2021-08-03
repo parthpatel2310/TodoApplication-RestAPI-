@@ -5,6 +5,8 @@ import com.abc.rest.webservice.restfulwebservices.bean.UserBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserService {
 
@@ -21,6 +23,11 @@ public class UserService {
     {
         UserBean user = userDAO.findUSerBeanByUserName(username);
         return user;
+    }
+
+    public List<UserBean> findAll(){
+        List<UserBean> userBeanList = userDAO.findAll();
+        return  userBeanList;
     }
 
 
